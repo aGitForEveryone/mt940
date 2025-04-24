@@ -19,5 +19,3 @@ __all__ = [
     'tags',
     'json',
 ]
-
-print("Import custom mt940 library")

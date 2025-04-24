@@ -10,6 +10,7 @@ except ImportError:  # pragma: no cover
 
 import mt940
 
+from . import utils
 from . import _compat
 from . import processors
 
@@ -305,7 +306,7 @@ class Transactions(abc.Sequence):
 
     @property
     def currency(self):
-        balance = mt940.utils.coalesce(
+        balance = utils.coalesce(
             self.data.get('final_opening_balance'),
             self.data.get('opening_balance'),
             self.data.get('intermediate_opening_balance'),
@@ -447,9 +448,14 @@ class Transactions(abc.Sequence):
             # Creating a new transaction for :20: and :61: tags allows the
             # tags from :20: to :61: to be captured as part of the transaction.
 
+            if isinstance(tag, mt940.tags.BalanceBase):
+                print(f"BalanceBase: {tag}")
+                print(f"Scope: {tag.scope}")
+
             if isinstance(
-                    tag,
-                    (mt940.tags.Statement, mt940.tags.TransactionReferenceNumber)
+                tag,
+                # (mt940.tags.Statement, mt940.tags.TransactionReferenceNumber)
+                mt940.tags.Statement
             ):
                 # Transactions only get a Transaction Reference Code ID from a
                 # :61: tag which is why a new transaction is created if the
